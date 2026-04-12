@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart UDC Management System - Baheratail</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0d6efd">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; }
+        .hero { background: linear-gradient(135deg, #0d6efd, #0dcaf0); color: white; padding: 2rem 0; text-align: center; border-radius: 0 0 20px 20px; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .card { border: none; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 1.5rem; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-5px); }
+        .status-badge { position: fixed; top: 10px; right: 10px; z-index: 1050; border-radius: 20px; padding: 5px 15px; font-weight: bold; }
+        .offline { background-color: #ffc107; color: #000; }
+        .online { background-color: #198754; color: #fff; }
+        #floating-msg { display: none; position: fixed; bottom: 20px; right: 20px; background: rgba(0,0,0,0.8); color: white; padding: 10px 20px; border-radius: 20px; z-index: 1050; animation: float 2s infinite ease-in-out; }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        /* Loader */
+        .loader { display: none; border: 4px solid #f3f3f3; border-top: 4px solid #0d6efd; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-left: 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div id="connection-status" class="status-badge online">🌐 Online Mode</div>
+    <div id="floating-msg">🌌 Data Floating...</div>
+
+    <div class="hero">
+        <h1 class="display-5 fw-bold">Smart UDC Baheratail</h1>
+        <p class="lead mb-0">Unified Management System with Antigravity Support</p>
+    </div>
+
+    <div class="container pb-5">
+        <!-- Auth Section -->
+        <div id="auth-section" class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card p-4">
+                    <h3 class="text-center mb-4">Staff Login</h3>
+                    <form id="login-form">
+                        <div class="mb-3">
+                            <label class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Section (Hidden by default) -->
+        <div id="dashboard-section" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Welcome, <span id="user-name-display">Operator</span></h2>
+                <button id="logout-btn" class="btn btn-outline-danger">Logout</button>
+            </div>
+
+            <div class="row">
+                <!-- Citizen Registration -->
+                <div class="col-md-6">
+                    <div class="card p-4 h-100">
+                        <h4 class="mb-3 text-primary">📝 Register Citizen</h4>
+                        <form id="citizen-form">
+                            <div class="mb-3">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="c-name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">NID Number</label>
+                                <input type="text" class="form-control" id="c-nid" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Address</label>
+                                <textarea class="form-control" id="c-address" rows="2" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success">Save Citizen<span class="loader" id="save-loader"></span></button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Bulk Import & QR Tools -->
+                <div class="col-md-6">
+                    <div class="card p-4 mb-4">
+                        <h4 class="mb-3 text-info">📦 Bulk Data Import</h4>
+                        <p class="text-muted small">Upload a CSV file with columns: name, nid, address</p>
+                        <input class="form-control mb-3" type="file" id="csv-file" accept=".csv">
+                        <button id="import-btn" class="btn btn-info text-white w-100">Import CSV</button>
+                    </div>
+
+                    <div class="card p-4 text-center">
+                        <h4 class="mb-3 text-secondary">🔍 Pending Syncs</h4>
+                        <h2 class="display-4 fw-bold text-warning" id="pending-count">0</h2>
+                        <p class="text-muted">Records stored offline</p>
+                        <button id="force-sync-btn" class="btn btn-outline-secondary btn-sm">Force Sync Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chairman / Operator Table View -->
+            <div class="card p-4 mt-4">
+                <h4 class="mb-3">🗂️ Recent Certificates (Verification Demo)</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Ref No</th>
+                                <th>Name</th>
+                                <th>NID</th>
+                                <th>Status</th>
+                                <th>QR Code</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cert-table-body">
+                            <!-- Dynamic Content -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Modal -->
+    <div class="modal fade" id="qrModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content text-center p-4">
+                <h5 class="modal-title mb-3">Verification QR</h5>
+                <div id="qrcode-container" class="mx-auto mb-3"></div>
+                <p class="small text-muted" id="qr-ref-display"></p>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="/antigravity.js"></script>
+</body>
+</html>

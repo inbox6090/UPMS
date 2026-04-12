@@ -1,0 +1,10 @@
+- [ ] Initialize Laravel Framework
+- [ ] Database Migrations (User Role, Citizens, Certificates, Activity Logs)
+- [ ] Backend Models (User, Citizen, Certificate, ActivityLog)
+- [ ] Middleware (RoleMiddleware)
+- [ ] Controllers (AuthController, CitizenController, CertificateController, VerifyController)
+- [ ] Routes configuration
+- [ ] Frontend PWA Shell (manifest.json, service-worker.js, offline.html)
+- [ ] Offline JavaScript Core (`antigravity.js` - IndexedDB, Sync, PapaParse)
+- [ ] UI Views (Login, Dashboard, Verify)
+- [ ] README.md Documentation
