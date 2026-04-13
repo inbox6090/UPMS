@@ -1,0 +1,24 @@
+{
+    "name": "Smart UDC System | 02 Baheratail",
+    "short_name": "Smart UDC",
+    "description": "Paperless, Smart, and Transparent Digital Services.",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#f0fdf4",
+    "theme_color": "#15803d",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "./assets/1000182319.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "./assets/1000182319.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Smart UDC System | 02 Baheratail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#15803d">
+    <script src="https://cdn.jsdelivr.net/npm/html5-qrcode/html5-qrcode.min.js"></script>
+    <style>
+        .hero-pattern {
+            background-color: #15803d;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white shadow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="./assets/1000182319.png" alt="Logo" class="w-10 h-10 object-contain bg-green-700 rounded-full p-1 border-2 border-green-700" onerror="this.src='https://ui-avatars.com/api/?name=UDC&background=15803d&color=fff'">
+                <div>
+                    <h1 class="text-xl font-bold text-green-800 leading-tight">Smart UDC System</h1>
+                    <p class="text-xs text-gray-500 font-semibold">02 No. Baheratail Union Parishad</p>
+                </div>
+            </div>
+            <div>
+                <a href="login.html" class="text-green-700 font-bold hover:text-green-900 px-4 py-2 bg-green-100 rounded-lg transition border border-green-200">Official Login</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="flex-grow">
+        <div class="hero-pattern py-16 text-center text-white px-4">
+            <h2 class="text-3xl md:text-5xl font-extrabold mb-4 drop-shadow-md">Welcome to Smart UDC</h2>
+            <p class="text-green-100 text-lg md:text-xl max-w-2xl mx-auto mb-8 font-light">
+                Paperless, Smart, and Transparent Digital Services. Verify issued certificates instantly using our QR portal.
+            </p>
+            
+            <button id="installAppBtn" class="hidden bg-white text-green-800 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition duration-200">
+                Install Desktop/Mobile App
+            </button>
+        </div>
+
+        <!-- Verification Portal -->
+        <div class="max-w-3xl mx-auto -mt-10 px-4 mb-16">
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 p-6 md:p-10">
+                <h3 class="text-2xl font-bold text-center text-gray-800 mb-2">Certificate Verification</h3>
+                <p class="text-center text-gray-500 mb-8 text-sm">Enter the 6-digit Serial Number (DDMMSS) or Scan QR Code</p>
+
+                <div class="flex flex-col md:flex-row gap-4 mb-6">
+                    <input type="text" id="serialInput" placeholder="Enter Serial Number" class="flex-grow text-lg px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-green-500 focus:ring-0 outline-none transition text-center uppercase tracking-widest font-mono">
+                    <button id="verifyBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-xl shadow transition duration-200 flex justify-center items-center">
+                        <span>Verify Now</span>
+                        <svg id="vSpinner" class="animate-spin ml-2 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    </button>
+                </div>
+                
+                <div class="text-center mb-6">
+                    <span class="text-gray-400 font-medium text-sm px-4">OR</span>
+                </div>
+
+                <div class="text-center">
+                    <button id="scanQrBtn" class="text-blue-600 font-semibold hover:text-blue-800 flex items-center justify-center gap-2 mx-auto">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+                        Scan QR Code Label
+                    </button>
+                    <div id="qr-reader" class="mx-auto mt-4 w-full max-w-sm hidden border rounded overflow-hidden"></div>
+                </div>
+
+                <!-- Result Area -->
+                <div id="verifyResult" class="mt-8 hidden p-6 rounded-xl border bg-gray-50 flex flex-col items-center text-center">
+                    <!-- Dynamic content via JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-6 text-center">
+        <p class="text-sm">Authority: Panel Chairman Mosharaf Hossain (Hero Mia)</p>
+        <p class="text-xs mt-1 text-gray-500">Developer: MD JUBAER HOSSEN • WhatsApp: +8801834-333300</p>
+    </footer>
+
+    <script src="./js/api.js"></script>
+    <script>
+        // PWA Installation Logic
+        let deferredPrompt;
+        const installBtn = document.getElementById('installAppBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.classList.remove('hidden');
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt !== null) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    installBtn.classList.add('hidden');
+                }
+                deferredPrompt = null;
+            }
+        });
+
+        // Register SW
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./service-worker.js')
+                .then(() => console.log('SW Registered'))
+                .catch(err => console.error('SW Error:', err));
+        }
+
+        // Verification Logic Trigger
+        document.getElementById('verifyBtn').addEventListener('click', async () => {
+            const serial = document.getElementById('serialInput').value.trim();
+            if (!serial) return alert("Please enter a serial number");
+            
+            const btn = document.getElementById('verifyBtn');
+            const spinner = document.getElementById('vSpinner');
+            const resultDiv = document.getElementById('verifyResult');
+            
+            btn.disabled = true; spinner.classList.remove('hidden'); resultDiv.classList.add('hidden');
+            
+            try {
+                // api.js provides API_URL
+                const res = await fetch(`${API_URL}?action=verifySerial&serial=${serial}`);
+                const data = await res.json();
+                
+                resultDiv.classList.remove('hidden');
+                if (data.status === 'success') {
+                    resultDiv.className = 'mt-8 p-6 rounded-xl border border-green-200 bg-green-50 flex flex-col items-center text-center';
+                    resultDiv.innerHTML = `
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-3">
+                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <h4 class="text-xl font-bold text-green-800 mb-1">Authentic Document</h4>
+                        <p class="text-sm text-gray-700">Serial: <span class="font-mono font-bold">${serial}</span></p>
+                        <hr class="w-full my-4 border-green-200">
+                        <p class="font-semibold text-gray-800 text-lg">${data.data.Name || 'N/A'}</p>
+                        <p class="text-xs text-gray-500 uppercase tracking-wide">Type: ${data.data.Type || 'Unknown'}</p>
+                        <p class="text-xs mt-2 text-gray-600">Status: <span class="bg-green-200 text-green-800 px-2 py-0.5 rounded uppercase font-bold text-[10px]">${data.data.Status}</span></p>
+                    `;
+                } else {
+                    resultDiv.className = 'mt-8 p-6 rounded-xl border border-red-200 bg-red-50 flex flex-col items-center text-center';
+                    resultDiv.innerHTML = `
+                        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-3">
+                            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </div>
+                        <h4 class="text-xl font-bold text-red-800">Record Not Found</h4>
+                        <p class="text-sm text-gray-600">This serial number could not be authenticated in our system.</p>
+                    `;
+                }
+            } catch(e) {
+                alert("Network error detecting verification API. Ensure you are online.");
+            } finally {
+                btn.disabled = false; spinner.classList.add('hidden');
+            }
+        });
+
+        // QR Scanner Toggle
+        let html5QrCode;
+        document.getElementById('scanQrBtn').addEventListener('click', () => {
+            const qrWrapper = document.getElementById('qr-reader');
+            if (qrWrapper.classList.contains('hidden')) {
+                qrWrapper.classList.remove('hidden');
+                html5QrCode = new Html5Qrcode("qr-reader");
+                html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } },
+                    (decodedText) => {
+                        let serial = decodedText;
+                        // If it's a URL, extract serial
+                        if (decodedText.includes('?serial=')) {
+                            serial = new URL(decodedText).searchParams.get('serial');
+                        }
+                        if(serial) {
+                            html5QrCode.stop();
+                            qrWrapper.classList.add('hidden');
+                            document.getElementById('serialInput').value = serial;
+                            document.getElementById('verifyBtn').click();
+                        }
+                    },
+                    () => {}
+                ).catch(err => alert("Camera access required for QR scanning."));
+            } else {
+                if (html5QrCode) html5QrCode.stop();
+                qrWrapper.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

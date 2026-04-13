@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Smart UDC Login | 02 No. Baheratail</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#15803d">
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+        }
+        .circular-profile {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid #15803d;
+            box-shadow: 0 4px 15px rgba(21, 128, 61, 0.3);
+            object-fit: cover;
+            margin: 0 auto;
+            display: block;
+        }
+        body {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="glass-panel w-full max-w-md rounded-2xl overflow-hidden shadow-2xl transition-all duration-300">
+        <!-- Header -->
+        <div class="bg-green-700 p-6 text-center shadow-inner relative">
+            <h1 class="text-2xl font-bold text-white mb-1">Smart UDC System</h1>
+            <p class="text-green-100 text-sm">02 No. Baheratail Union Parishad</p>
+        </div>
+
+        <div class="p-8">
+            <!-- Profile Image Placeholder -->
+            <div class="mb-6 relative">
+                <img src="./assets/1000182319.png" alt="UDC Logo" class="circular-profile bg-white p-2" onerror="this.src='https://ui-avatars.com/api/?name=UDC&background=15803d&color=fff&size=200'">
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email / User ID</label>
+                    <input type="email" id="emailInput" required 
+                           class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors shadow-sm"
+                           placeholder="admin@baheratail.com">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                    <input type="password" id="passwordInput" required 
+                           class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors shadow-sm"
+                           placeholder="••••••">
+                </div>
+                
+                <div id="loginError" class="hidden text-red-600 text-sm text-center font-medium py-2 rounded bg-red-50">
+                    Invalid Credentials
+                </div>
+
+                <button type="submit" id="loginBtn"
+                        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg shadow transition duration-200 transform hover:-translate-y-0.5 active:translate-y-0 flex justify-center items-center">
+                    <span>Secure Login</span>
+                    <svg id="loadingSpinner" class="animate-spin ml-2 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </button>
+            </form>
+        </div>
+
+        <!-- Developer Credit -->
+        <div class="bg-gray-50 p-4 border-t border-gray-100 text-center">
+            <p class="text-xs text-gray-500">Developed By</p>
+            <p class="text-sm font-bold text-green-700 tracking-wide mt-1">MD JUBAER HOSSEN</p>
+            <p class="text-xs text-gray-500">UDC 02 Baheratail | WA: +8801834-333300</p>
+        </div>
+    </div>
+
+    <script src="./js/auth.js"></script>
+    <script>
+        // Basic service worker registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./service-worker.js')
+                .then(() => console.log("Service Worker Registered"))
+                .catch(err => console.log("SW Registration Failed:", err));
+        }
+    </script>
+</body>
+</html>

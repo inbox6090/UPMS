@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard | Smart UDC System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#15803d">
+    <style>
+        .sidebar-active {
+            background-color: #166534; /* green-800 */
+            border-left: 4px solid #4ade80; /* green-400 */
+        }
+        .section-hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased overflow-hidden flex h-screen">
+
+    <!-- Mobile Header -->
+    <div class="md:hidden fixed top-0 w-full bg-green-700 text-white p-4 flex justify-between items-center z-50 shadow">
+        <h1 class="font-bold text-lg">Smart UDC System</h1>
+        <button id="mobileMenuBtn" class="focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <nav id="sidebar" class="bg-green-700 text-white w-64 flex-shrink-0 flex flex-col h-full absolute md:relative z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 shadow-xl">
+        <div class="p-6 text-center border-b border-green-600 mt-12 md:mt-0">
+            <img src="./assets/1000182319.png" alt="Logo" class="w-20 h-20 mx-auto rounded-full bg-white p-1 mb-2">
+            <h2 class="text-xl font-bold">02 Baheratail</h2>
+            <div class="text-xs text-green-200 mt-1 flex justify-center items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-green-400 inline-block" id="networkStatusIndicator"></span>
+                <span id="networkStatusText">Online</span>
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto py-4">
+            <ul class="space-y-1">
+                <li>
+                    <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="sidebar-active block px-6 py-3 hover:bg-green-600 transition">
+                        📊 Overview
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="switchTab('citizens')" id="nav-citizens" class="block px-6 py-3 hover:bg-green-600 transition">
+                        👥 Citizen Registration
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="switchTab('applications')" id="nav-applications" class="block px-6 py-3 hover:bg-green-600 transition">
+                        📁 Application Hub
+                    </a>
+                </li>
+                <li class="role-chairman-only">
+                    <a href="#" onclick="switchTab('reports')" id="nav-reports" class="block px-6 py-3 hover:bg-green-600 transition">
+                        📈 Reports & Logs
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="p-4 border-t border-green-600 bg-green-800">
+            <div class="mb-3">
+                <p class="text-sm font-semibold" id="ui_userName">User Name</p>
+                <p class="text-xs text-green-300" id="ui_userRole">Role</p>
+            </div>
+            <button id="logoutBtn" class="w-full bg-red-600 hover:bg-red-700 text-white text-sm py-2 px-4 rounded transition">
+                Logout
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden pt-16 md:pt-0 pb-16 md:pb-0">
+        <!-- Main Scrollable Area -->
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 bg-gray-50">
+            
+            <!-- ====== DASHBOARD OVERVIEW ====== -->
+            <section id="sec-dashboard" class="animate-fade-in">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">System Overview</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Stat Card -->
+                    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-blue-500">
+                        <div class="text-sm text-gray-500 font-semibold mb-1">Total Citizens</div>
+                        <div class="text-3xl font-bold text-gray-800" id="statTotalCitizens">0</div>
+                    </div>
+                    <!-- Stat Card -->
+                    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-yellow-500">
+                        <div class="text-sm text-gray-500 font-semibold mb-1">Pending Apps</div>
+                        <div class="text-3xl font-bold text-gray-800" id="statPendingApps">0</div>
+                    </div>
+                    <!-- Stat Card -->
+                    <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-green-500">
+                        <div class="text-sm text-gray-500 font-semibold mb-1">Approved Certificates</div>
+                        <div class="text-3xl font-bold text-gray-800" id="statApprovedApps">0</div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="text-lg font-semibold mb-4 border-b pb-2">Activity Overview</h3>
+                    <div class="h-64">
+                        <canvas id="activityChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ====== CITIZEN REGISTRATION ====== -->
+            <section id="sec-citizens" class="section-hidden animate-fade-in">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Citizen Registration</h2>
+                    <div class="relative">
+                        <input type="text" id="liveSearchInput" placeholder="Live search NID/Name..." class="px-4 py-2 border rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500 w-64 shadow-sm">
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <form id="citizenForm" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- 1 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Full Name (Bangla)</label>
+                                <input type="text" name="name" required class="w-full p-2 border rounded focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <!-- 2 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">NID / BRN</label>
+                                <input type="number" name="nid" required class="w-full p-2 border rounded focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <!-- 3 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Father's Name</label>
+                                <input type="text" name="father" required class="w-full p-2 border rounded focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <!-- 4 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Mother's Name</label>
+                                <input type="text" name="mother" required class="w-full p-2 border rounded focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <!-- 5 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Spouse Name (Optional)</label>
+                                <input type="text" name="spouse" class="w-full p-2 border rounded focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <!-- 6 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+                                <select name="gender" required class="w-full p-2 border rounded focus:ring-green-500 focus:border-green-500">
+                                    <option value="Male">Male (পুরুষ)</option>
+                                    <option value="Female">Female (নারী)</option>
+                                    <option value="Other">Other (অন্যান্য)</option>
+                                </select>
+                            </div>
+                            <!-- 7 -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+                                <input type="tel" name="mobile" required class="w-full p-2 border rounded focus:ring-green-500 focus:border-green-500">
+                            </div>
+                            <!-- Address Block -->
+                            <div class="col-span-1 md:col-span-2 space-y-4 border-t pt-4 mt-2">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Permanent Address</label>
+                                    <textarea name="permanent_address" id="permAddr" required rows="2" class="w-full p-2 border rounded focus:ring-green-500 focus:border-green-500"></textarea>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="sameAddressCheck" class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
+                                    <label for="sameAddressCheck" class="ml-2 block text-sm text-gray-900">
+                                        Present Address is same as Permanent
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Present Address</label>
+                                    <textarea name="present_address" id="presAddr" required rows="2" class="w-full p-2 border rounded focus:ring-green-500 focus:border-green-500"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- System Error Output -->
+                        <div id="formError" class="hidden text-red-600 bg-red-50 p-3 rounded text-sm font-medium"></div>
+                        <div id="formSuccess" class="hidden text-green-700 bg-green-50 p-3 rounded text-sm font-medium"></div>
+
+                        <div class="flex justify-end pt-4 border-t">
+                            <button type="submit" id="submitCitizenBtn" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded shadow flex items-center font-semibold">
+                                Save Citizen Record
+                                <svg id="btnSpinner" class="animate-spin ml-2 h-4 w-4 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- ====== APPLICATION HUB ====== -->
+            <section id="sec-applications" class="section-hidden animate-fade-in">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Application Hub</h2>
+                    <button onclick="openNewApplicationModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-semibold shadow">
+                        + New Application
+                    </button>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Serial</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NID / Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="applicationTableBody" class="bg-white divide-y divide-gray-200">
+                                <!-- Data populated by app.js -->
+                                <tr><td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">Loading data...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="./js/auth.js"></script>
+    <script src="./js/api.js"></script>
+    <script src="./js/db.js"></script>
+    <script src="./js/app.js"></script>
+    <script src="./js/qr.js"></script>
+    
+</body>
+</html>
